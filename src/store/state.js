@@ -3,4 +3,5 @@
  */
 export default {
   goNative: true,
+  replacehistory: false
 }

@@ -14,7 +14,18 @@ if(LenSmJs.isAndroid == true){
      //android终端
 }
 
-
+/**
+ * 0.6 finish：
+ *
+ */
+LenSmJs.initFinish_h5 = function(){
+  if(LenSmJs.isAndroid == true){
+    //android终端
+    JsInterface.initFinish();
+  }else{
+    successBack();
+  }
+};
 /**
  *  0.1、回调方法
  *  参数：设备号：id ；
@@ -26,9 +37,9 @@ if(LenSmJs.isAndroid == true){
  *
  */
 
-function callbackdata(id,name,data){
+/*function callbackdata(id,name,data){
 
-}
+}*/
 
 
 /**
@@ -90,7 +101,7 @@ LenSmJs.getRemoveListener_h5 = function(){
  *      set : 		设置
         home :		app首页
         QuipmentList :	设备列表
- *      Ps:具体跳转app界面参数，待定
+ *      Ps:具体跳转app界面参数，待定。
  */
 LenSmJs.HtmlJumpApp_h5 = function(toPage){
     if(LenSmJs.isiOS == true){
@@ -112,7 +123,7 @@ LenSmJs.QueryEventsAllLogsWithStartTime_h5 = function(gadgetId,attributeIds, sta
     if(LenSmJs.isiOS == true){
         QueryEventsAllLogsWithStartTime("gadgetId="+gadgetId,"attributeIds="+attributeIds, "startTime="+startTime, "endTime="+endTime, "num="+num);
     }else{
-
+        JsInterface.QueryEventsAllLogsWithStartTime(gadgetId,attributeIds,startTime,endTime,num);
     }
 };
 
@@ -427,8 +438,8 @@ LenSmJs.UnbindHub_h5 = function(itemType, hubId){
 //第一步 注册监听：
 LenSmJs.getAddListener_h5();
 //第二步 开始绑定
-LenSmJs.startAutoFindDeviceBySoftAp_h5 = function(ssid, psd, ls, sl, perCode, timeZone, cn, wctom, stom, btom, cgtom){
-    JsInterface.startAutoFindDeviceBySoftAp(ssid, psd, ls, sl, perCode, timeZone, cn, wctom, stom, btom, cgtom);
+LenSmJs.startAutoFindDeviceBySoftAp_h5 = function(devicename, ssid, psd, ip, ls, sl, perCode, timeZone, cn, wctom, stom, btom, cgtom, commongadget){
+    JsInterface.startAutoFindDeviceBySoftAp(devicename, ssid, psd, ip, ls, sl, perCode, timeZone, cn, wctom, stom, btom, cgtom, commongadget);
 };
 
 /**
@@ -475,6 +486,53 @@ LenSmJs.updateGadgetListWithResultBlock_h5 = function(macaddr){
         updateGadgetListWithResultBlock("macaddr="+macaddr);
     }
 };
+
+
+/**
+ * 22、 获取所有home信息（本地）
+ * //获取所有家庭home列表
+ *
+ * 返回数据：homeid  homename
+ * 返回值格式：[{“home_id”:”01ac43921e67e768c66f0670fc58061d”,”home_name”:”家庭1”},{“home_id”:”123456”,”home_name”:”家庭1”}]
+ */
+
+
+LenSmJs.GetHomeList_h5 = function(){
+    if(LenSmJs.isiOS == true) {
+        GetHomeList();
+    }else{
+        JsInterface.GetHomeList();
+    }
+};
+/**
+ * 23、  版本更新：获取版本号，根据新旧版本号是否一致，来判断是否是新版本
+ * 返回值：
+ * {"state":"0","code":"aaa","version":"abcdefghi"}
+ * state： 字符串 0 成功 ； 1  失败
+ *
+ */
+
+LenSmJs.GetEquipmentVersion_h5 = function(){
+    if(LenSmJs.isiOS == true) {
+        GetEquipmentVersion();
+    }
+};
+
+/**
+ * 24、  获取当前连接的wifi的名字
+ * 返回值：
+ *  string "wifiName"
+ *  ps：返回值是获取到的经过base64加密wifi名字；所以需要先解密，再使用；
+ *
+ */
+
+LenSmJs.GetWifiName_h5 = function(){
+    if(LenSmJs.isiOS){
+        GetWifiName();
+    }else{
+        JsInterface.GetWifiName();
+    }
+}
 
 
 /***

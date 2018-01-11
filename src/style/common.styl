@@ -19,9 +19,17 @@ html, body
   overflow hidden
 
 
+
 body
   font-size .24rem
   color #666666
+  -webkit-tap-highlight-color: transparent;/*点击不闪*/
+  -webkit-touch-callout:none;  /*系统默认菜单被禁用*/
+  -webkit-user-select:none; /*webkit浏览器*/
+  -khtml-user-select:none; /*早期浏览器*/
+  -moz-user-select:none;/*火狐*/
+  -ms-user-select:none; /*IE10*/
+  user-select:none;
 
 
 input[type="button"], input[type="submit"], input[type="search"], input[type="reset"]
@@ -101,4 +109,18 @@ bg-img(url)
   @media (-webkit-min-device-pixel-ratio: 3),(min-device-pixel-ratio: 3)
     background-image: url("./img/"+url+"@3x.png")
 /*background-image end*/
+
+
+@keyframes jetter
+  0%
+    transform: translateX(0px)
+  25%
+    transform: translateX(6px)
+  50%
+    transform: translateX(0px)
+  75%
+    transform: translateX(-6px)
+  100%
+    transform: translateX(0px)
+
 

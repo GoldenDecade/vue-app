@@ -6,10 +6,19 @@ import router from './router'
 import store from './store'
 import './utils/rem'
 import FastClick from 'fastclick'
+let supportsPassive = false;
+try {
+  let opts = Object.defineProperty({}, 'passive', {
+    get: function() {
+      supportsPassive = true;
+    }
+  });
+  window.addEventListener("test", null, opts);
+} catch (e) {}
 if ('addEventListener' in document) {
   document.addEventListener('DOMContentLoaded', function() {
     FastClick.attach(document.body);
-  }, false);
+  }, supportsPassive ? { passive: false } : false);
 }
 Vue.config.productionTip = false
 

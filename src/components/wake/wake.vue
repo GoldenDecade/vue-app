@@ -9,12 +9,12 @@
         <p>3.长按设备上的配对键3秒后点击下一步</p>
       </section>
     </section>
-    <router-link tag="section" to="/join">
+    <!--<router-link tag="section" to="/join">
       <foot title="下一步"></foot>
-    </router-link>
-    <!--<div @click='nextAction'>
+    </router-link>-->
+    <div @click='nextAction'>
       <foot title="下一步"></foot>
-    </div>-->
+    </div>
 
   </div>
 </template>
@@ -42,12 +42,12 @@
   import foot from '../common/foot.vue'
   export default {
     created(){
-      this.$store.state.goNative = false
+      this.$store.state.goNative = true
     },
     methods: {
-      /*nextAction(){
+      nextAction(){
         this.$router.push('/join')
-      }*/
+      }
     },
     components: {
       headerTop, foot

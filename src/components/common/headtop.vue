@@ -1,8 +1,10 @@
 <template>
   <header id="headtop" class="boder-1px">
-    <span id="back" @click="back"><svg class="icon" aria-hidden="true">
-  <use xlink:href="#icon-arrow-left"></use>
-</svg></span>
+    <span id="back" @click="back">
+      <svg class="icon" aria-hidden="true">
+        <use xlink:href="#icon-arrow-left"></use>
+      </svg>
+    </span>
     <span id="title">{{title}}</span>
   </header>
 </template>
@@ -45,20 +47,32 @@
       line-height .2rem
       font-size .18rem
       color #222
+      text-overflow ellipsis
+      white-space nowrap
+      overflow: hidden
       text-align center
 </style>
 <script type="text/ecmascript-6">
   import '@/font/iconfont.js'
   export default {
     props: ['title'],
+    created(){
+      let that = this
+      window.backactivity = function (){
+        if(this.$store.state.goNative){
+          //  返回到native
+          LenSmJs.initFinish_h5()
+        }else {
+          that.$router.goBack()
+        }
+      }
+    },
     methods: {
       back(){
         if(this.$store.state.goNative){
         //  返回到native
-        //   LenSmJs.HtmlJumpApp_h5('list')
-          alert('native')
+          LenSmJs.initFinish_h5()
         }else {
-          console.log(this.$router.goBack);
           this.$router.goBack()
         }
       }

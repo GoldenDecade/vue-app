@@ -8,16 +8,18 @@
         <p>暂不支持5GHz网络，仅支持2.4GHz网络</p>
       </section>
       <section class="wifiname">
-        <input  placeholder="请输入Wi-Fi名称" name="wifi" type="text" />
+        <input  placeholder="请输入Wi-Fi名称" disabled v-model="wifiName" name="wifi" type="text" />
       </section>
       <section class="wifipsd">
-        <input  placeholder="请输入Wi-Fi密码" name="psd" type="password" />
-        <span class="eye"></span>
+        <input v-if="!isPsd" type="password"  placeholder="请输入Wi-Fi密码" v-model="wifiPsd"  name="psd"  />
+        <input v-else type="text" placeholder="请输入Wi-Fi密码" v-model="wifiPsd"  name="psd"  />
+        <span class="eye" :class="{open: isPsd}" @click="changeType"></span>
       </section>
-      <p class="rempsd"><span class="box"></span><span class="ok"></span>记住密码</p>
-
+      <p class="rempsd"><span @click="remberPsd"><span class="box"></span><span class="ok" v-show="remPsd"></span>记住密码</span></p>
     </section>
-    <foot title="开始设置"></foot>
+    <div @click='nextAction'>
+      <foot title="开始设置" :able="isCan"></foot>
+    </div>
   </div>
 </template>
 <style rel="stylesheet" lang="stylus">
@@ -77,6 +79,8 @@
           bg-img('eye')
           background-repeat no-repeat
           background-origin content-box
+          &.open
+            bg-img('openeye')
       .rempsd
         position relative
         margin-left .36rem
@@ -92,7 +96,6 @@
           bg-img('box')
           vertical-align middle
         .ok
-          display none
           position absolute
           left 0
           top 0
@@ -104,12 +107,65 @@
 <script type="text/ecmascript-6">
   import headerTop from '../common/headtop.vue'
   import foot from '../common/foot.vue'
+  import Base64 from './js/base64.js'
+
   export default {
+    data(){
+      return {
+        wifiName: '',
+        wifiPsd: '',
+        remPsd: false,
+        isPsd: false
+      }
+    },
+    beforeCreate() {
+      let that = this
+      that.$store.state.goNative = false
+
+      LenSmJs.getAddListener_h5()
+      LenSmJs.GetWifiName_h5()
+      window.callbackdata = function callbackdata(id, name, data) {
+        if (name === 'GetWifiName') { // 获取wifi 名字
+          that.wifiName = new Base64().decode(data)
+          window.localStorage.setItem('wifiName', that.wifiName)
+          if (window.localStorage.getItem('wifiName') === that.wifiName && window.localStorage.getItem('wifiPsd') && that.remPsd) {
+            that.wifipsd = window.localStorage.getItem('wifiPsd')
+          }
+        }
+      }
+    },
     created(){
-      this.$store.state.goNative = false
+
+
+    },
+    mounted(){
+
+    },
+    beforeDestory() {
+
+      LenSmJs.getRemoveListener_h5();
     },
     methods: {
-    //  获取
+      nextAction(){
+        console.log(this.wifiPsd.trim());
+        localStorage.setItem('wifiPsd', this.wifiPsd.trim())
+        if (LenSmJs.isAndroid && this.wifiPsd.trim().length) {
+          this.$router.push('/process')
+        } else if(LenSmJs.isiOS && this.wifiPsd.trim().length ) { // ios
+          this.$router.push('/hotdot')
+        }
+      },
+      remberPsd(){
+        this.remPsd = !this.remPsd
+      },
+      changeType(){
+        this.isPsd = !this.isPsd
+      }
+    },
+    computed: {
+      isCan(){
+        return this.wifiPsd.trim().length ? 'can' : ''
+      }
     },
     components: {
       headerTop, foot
